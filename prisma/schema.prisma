@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String         @id
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  email        String         @unique
+  name         String
+  clientId     Int
+  client       client         @relation(fields: [clientId], references: [id])
+  orders       order[]
+  orderHistory orderHistory[]
+  isAdmin      Boolean        @default(false)
+}
+
+model order {
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  name          String
+  description   String
+  client        client   @relation(fields: [clientId], references: [id])
+  clientId      Int
+  quantity      Int
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String
+  agencyDueDate DateTime @db.Date
+  clientDueDate DateTime @db.Date
+  status        String
+
+  orderHistory orderHistory[]
+}
+
+model orderHistory {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  order     order    @relation(fields: [orderId], references: [id])
+  orderId   Int
+  status    String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  notes     String
+}
+
+model client {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String   @unique
+  description String
+  isActive    Boolean  @default(true)
+  orders      order[]
+  User        User[]
+}

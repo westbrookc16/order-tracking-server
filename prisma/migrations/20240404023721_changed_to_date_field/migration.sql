@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "order" ALTER COLUMN "agencyDueDate" SET DATA TYPE DATE,
+ALTER COLUMN "clientDueDate" SET DATA TYPE DATE;
