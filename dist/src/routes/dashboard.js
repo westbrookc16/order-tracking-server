@@ -14,8 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const client_1 = require("@prisma/client");
-const superjson_1 = __importDefault(require("superjson"));
 const prisma = new client_1.PrismaClient();
+const json = (param) => {
+    return JSON.stringify(param, (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
+    );
+};
 const router = express_1.default.Router();
 router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const fieldName = "agencyDueDate";
@@ -31,7 +34,7 @@ router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     sql += ` group by c.name, c.id`;
     const totals = yield prisma.$queryRawUnsafe(sql);
-    res.send(superjson_1.default.stringify(totals));
+    res.send(json(totals));
 }));
 router.get("/:id/:status", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, status } = req.params;
