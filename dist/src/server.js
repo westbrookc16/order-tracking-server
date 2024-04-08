@@ -6,9 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv/config");
 const clerk_sdk_node_1 = require("@clerk/clerk-sdk-node");
 const express_1 = __importDefault(require("express"));
-BigInt.prototype.toJSON = function () {
-    return this.toString();
-};
+//create an express api server that listens on port 3001
 const app = (0, express_1.default)();
 const port = 3001;
 app.use(require("cors")());

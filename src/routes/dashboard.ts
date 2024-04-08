@@ -5,6 +5,12 @@ import { dashboard } from "../types/dashboard";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
+const json = (param: any): any => {
+  return JSON.stringify(
+    param,
+    (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
+  );
+};
 const router = express.Router();
 router.get("/", async (req: Request, res: Response) => {
   const fieldName = "agencyDueDate";
@@ -21,7 +27,7 @@ router.get("/", async (req: Request, res: Response) => {
   }
   sql += ` group by c.name, c.id`;
   const totals = await prisma.$queryRawUnsafe<dashboard[]>(sql);
-  res.json(totals);
+  res.send(json(totals));
 });
 router.get("/:id/:status", async (req: Request, res: Response) => {
   const { id, status } = req.params;
