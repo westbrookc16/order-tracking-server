@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc",
     "dev": "nodemon src/server.ts",
-    "start": "node dist/server.js"
+    "start": "node dist/src/server.js"
   },
   "author": "Chris Westbrook",
   "license": "ISC",
@@ -27,9 +27,9 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
-    "@types/node": "^20.12.3",
+    "@types/node": "^20.12.5",
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.4"
   }
 }

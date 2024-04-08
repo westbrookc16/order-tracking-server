@@ -6,7 +6,14 @@ import {
 } from "@clerk/clerk-sdk-node";
 import express, { Express, Request, Response } from "express";
 //create an express api server that listens on port 3001
-import "./types/bigint.ts";
+interface BigInt {
+  /** Convert to BigInt to string form in JSON.stringify */
+  toJSON: () => string;
+}
+BigInt.prototype.toJSON = function () {
+  return this.toString();
+};
+
 const app: Express = express();
 const port = 3001;
 app.use(require("cors")());
