@@ -1,3 +1,4 @@
+import { json } from "../types/json";
 import { Prisma } from "@prisma/client";
 import { order } from "@prisma/client";
 import express, { Request, Response } from "express";
@@ -5,12 +6,7 @@ import { dashboard } from "../types/dashboard";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-const json = (param: any): any => {
-  return JSON.stringify(
-    param,
-    (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
-  );
-};
+
 const router = express.Router();
 router.get("/", async (req: Request, res: Response) => {
   const fieldName = "agencyDueDate";
