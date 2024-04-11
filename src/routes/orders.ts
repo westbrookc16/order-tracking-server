@@ -1,15 +1,15 @@
-import express, { Request, Response } from "express";
-import invariant from "tiny-invariant";
-import { ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
-import { PrismaClient } from "@prisma/client";
+import express, { Request, Response } from 'express';
+import invariant from 'tiny-invariant';
+import { ClerkExpressRequireAuth } from '@clerk/clerk-sdk-node';
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 const router = express.Router();
-router.get("/", async (req: Request, res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
   const orders = await prisma.order.findMany();
   res.json(orders);
 });
 
-router.get("/:id", async (req: Request, res: Response) => {
+router.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   const order = await prisma.order.findUnique({
     where: {
@@ -20,7 +20,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 });
 
 router.post(
-  "/",
+  '/',
   ClerkExpressRequireAuth(),
   async (req: Request, res: Response) => {
     const {
@@ -31,25 +31,27 @@ router.post(
       agencyDueDate,
       clientDueDate,
     } = req.body;
-    const order = await prisma.order.create({
-      data: {
-        quantity: parseInt(quantity),
 
-        name,
-        description,
-        agencyDueDate: new Date(agencyDueDate),
-        clientDueDate: new Date(clientDueDate),
-        status: "Pending",
-        client: { connect: { id: parseInt(clientId) } },
-        user: { connect: { id: req.auth.userId } },
-      }, //this is the data that will be inserted into the database
-    });
+    console.log('request', req.body.userId);
+    // const order = await prisma.order.create({
+    //   data: {
+    //     quantity: parseInt(quantity),
 
-    res.json(order);
+    //     name,
+    //     description,
+    //     agencyDueDate: new Date(agencyDueDate),
+    //     clientDueDate: new Date(clientDueDate),
+    //     status: 'Pending',
+    //     client: { connect: { id: parseInt(clientId) } },
+    //     user: { connect: { id: req.auth.userId } },
+    //   }, //this is the data that will be inserted into the database
+    // });
+
+    // res.json(order);
   }
 );
 router.put(
-  "/:id",
+  '/:id',
   ClerkExpressRequireAuth(),
   async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -63,14 +65,14 @@ router.put(
       status,
       notes,
     } = req.body;
-    invariant(id, "id is required");
-    invariant(quantity && typeof quantity === "number", "quantityis required");
-    invariant(clientId, "clientId is required");
+    invariant(id, 'id is required');
+    invariant(quantity && typeof quantity === 'number', 'quantityis required');
+    invariant(clientId, 'clientId is required');
 
-    invariant(name, "name is required");
-    invariant(description, "description is required");
-    invariant(agencyDueDate, "agencyDueDate is required");
-    invariant(clientDueDate, "clientDueDate is required");
+    invariant(name, 'name is required');
+    invariant(description, 'description is required');
+    invariant(agencyDueDate, 'agencyDueDate is required');
+    invariant(clientDueDate, 'clientDueDate is required');
 
     const order = await prisma.order.update({
       where: {
@@ -98,7 +100,7 @@ router.put(
   }
 );
 router.delete(
-  "/:id",
+  '/:id',
   ClerkExpressRequireAuth(),
   async (req: Request, res: Response) => {
     const { id } = req.params;

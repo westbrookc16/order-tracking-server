@@ -20,6 +20,7 @@ declare global {
 }
 app.use(express.json());
 app.use("/orders", ClerkExpressRequireAuth(), orders);
+app.use("/webhooks", require("./routes/webhook"));
 app.use("/history", ClerkExpressRequireAuth(), history);
 app.use("/clients", ClerkExpressRequireAuth(), clients);
 app.use(`/dashboard`, ClerkExpressRequireAuth(), require("./routes/dashboard"));

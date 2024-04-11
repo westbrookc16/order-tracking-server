@@ -1,15 +1,15 @@
-import { json } from "../types/json";
-import { Prisma } from "@prisma/client";
-import { order } from "@prisma/client";
-import express, { Request, Response } from "express";
-import { dashboard } from "../types/dashboard";
-import { PrismaClient } from "@prisma/client";
+import { json } from '../types/json';
+import { order } from '@prisma/client';
+import express, { Request, Response } from 'express';
+import { dashboard } from '../types/dashboard';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 const router = express.Router();
-router.get("/", async (req: Request, res: Response) => {
-  const fieldName = "agencyDueDate";
+
+router.get('/', async (req: Request, res: Response) => {
+  const fieldName = 'agencyDueDate';
 
   const { userId } = req.auth;
   const user = await prisma.user.findUnique({
@@ -25,25 +25,25 @@ router.get("/", async (req: Request, res: Response) => {
   const totals = await prisma.$queryRawUnsafe<dashboard[]>(sql);
   res.send(json(totals));
 });
-router.get("/:id/:status", async (req: Request, res: Response) => {
+router.get('/:id/:status', async (req: Request, res: Response) => {
   const { id, status } = req.params;
   console.log(`id:${id}, status:${status}`);
-  const fieldName = "agencyDueDate";
+  const fieldName = 'agencyDueDate';
   let sql = `select o.* from "order" o where o."clientId"=${id}`;
-  if (status === "perif") {
+  if (status === 'perif') {
     sql += ` and "${fieldName}"-CURRENT_DATE>=21`;
   }
-  if (status === "onTarget") {
+  if (status === 'onTarget') {
     sql += ` and "${fieldName}"-CURRENT_DATE>=14 and "${fieldName}"-CURRENT_DATE<21`;
   }
-  if (status === "concern") {
+  if (status === 'concern') {
     sql += ` and "${fieldName}"-CURRENT_DATE>=7 and "${fieldName}"-CURRENT_DATE<14`;
   }
-  if (status === "critical") {
+  if (status === 'critical') {
     sql += ` and "${fieldName}"-CURRENT_DATE>=3 and "${fieldName}"-CURRENT_DATE<7`;
   }
 
-  if (status === "error") {
+  if (status === 'error') {
     sql += ` and "${fieldName}"-CURRENT_DATE<3`;
   }
   const orders = await prisma.$queryRawUnsafe<order[]>(sql);
