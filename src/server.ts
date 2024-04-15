@@ -38,7 +38,7 @@ app.get("/", (req: Request, res: Response) => {
 app.use(Sentry.Handlers.errorHandler());
 
 // Optional fallthrough error handler
-app.use(function onError(err: any, req, res, next) {
+app.use(function onError(err: any, req: any, res: any, next: any) {
   // The error id is attached to `res.sentry` to be returned
   // and optionally displayed to the user for support.
   res.statusCode = 500;
