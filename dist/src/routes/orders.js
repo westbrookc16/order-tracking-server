@@ -18,11 +18,11 @@ const clerk_sdk_node_1 = require("@clerk/clerk-sdk-node");
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const router = express_1.default.Router();
-router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const orders = yield prisma.order.findMany();
     res.json(orders);
 }));
-router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const order = yield prisma.order.findUnique({
         where: {
@@ -31,33 +31,32 @@ router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     });
     res.json(order);
 }));
-router.post('/', (0, clerk_sdk_node_1.ClerkExpressRequireAuth)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/", (0, clerk_sdk_node_1.ClerkExpressRequireAuth)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { quantity, clientId, name, description, agencyDueDate, clientDueDate, } = req.body;
-    console.log('request', req.body.userId);
-    // const order = await prisma.order.create({
-    //   data: {
-    //     quantity: parseInt(quantity),
-    //     name,
-    //     description,
-    //     agencyDueDate: new Date(agencyDueDate),
-    //     clientDueDate: new Date(clientDueDate),
-    //     status: 'Pending',
-    //     client: { connect: { id: parseInt(clientId) } },
-    //     user: { connect: { id: req.auth.userId } },
-    //   }, //this is the data that will be inserted into the database
-    // });
-    // res.json(order);
+    const order = yield prisma.order.create({
+        data: {
+            quantity: parseInt(quantity),
+            name,
+            description,
+            agencyDueDate: new Date(agencyDueDate),
+            clientDueDate: new Date(clientDueDate),
+            status: "Pending",
+            client: { connect: { id: parseInt(clientId) } },
+            user: { connect: { id: req.auth.userId } },
+        }, //this is the data that will be inserted into the database
+    });
+    res.json(order);
 }));
-router.put('/:id', (0, clerk_sdk_node_1.ClerkExpressRequireAuth)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put("/:id", (0, clerk_sdk_node_1.ClerkExpressRequireAuth)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const { quantity, clientId, name, description, agencyDueDate, clientDueDate, status, notes, } = req.body;
-    (0, tiny_invariant_1.default)(id, 'id is required');
-    (0, tiny_invariant_1.default)(quantity && typeof quantity === 'number', 'quantityis required');
-    (0, tiny_invariant_1.default)(clientId, 'clientId is required');
-    (0, tiny_invariant_1.default)(name, 'name is required');
-    (0, tiny_invariant_1.default)(description, 'description is required');
-    (0, tiny_invariant_1.default)(agencyDueDate, 'agencyDueDate is required');
-    (0, tiny_invariant_1.default)(clientDueDate, 'clientDueDate is required');
+    (0, tiny_invariant_1.default)(id, "id is required");
+    (0, tiny_invariant_1.default)(quantity && typeof quantity === "number", "quantityis required");
+    (0, tiny_invariant_1.default)(clientId, "clientId is required");
+    (0, tiny_invariant_1.default)(name, "name is required");
+    (0, tiny_invariant_1.default)(description, "description is required");
+    (0, tiny_invariant_1.default)(agencyDueDate, "agencyDueDate is required");
+    (0, tiny_invariant_1.default)(clientDueDate, "clientDueDate is required");
     const order = yield prisma.order.update({
         where: {
             id: parseInt(id),
@@ -82,7 +81,7 @@ router.put('/:id', (0, clerk_sdk_node_1.ClerkExpressRequireAuth)(), (req, res) =
     });
     res.json(order);
 }));
-router.delete('/:id', (0, clerk_sdk_node_1.ClerkExpressRequireAuth)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete("/:id", (0, clerk_sdk_node_1.ClerkExpressRequireAuth)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const order = yield prisma.order.delete({
         where: {

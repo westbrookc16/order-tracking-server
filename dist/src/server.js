@@ -15,7 +15,6 @@ const history = require("./routes/history");
 const clients = require("./routes/clients");
 app.use(express_1.default.json());
 app.use("/orders", (0, clerk_sdk_node_1.ClerkExpressRequireAuth)(), orders);
-app.use("/webhooks", require("./routes/webhook"));
 app.use("/history", (0, clerk_sdk_node_1.ClerkExpressRequireAuth)(), history);
 app.use("/clients", (0, clerk_sdk_node_1.ClerkExpressRequireAuth)(), clients);
 app.use(`/dashboard`, (0, clerk_sdk_node_1.ClerkExpressRequireAuth)(), require("./routes/dashboard"));

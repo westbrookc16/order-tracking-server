@@ -17,8 +17,8 @@ const express_1 = __importDefault(require("express"));
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const router = express_1.default.Router();
-router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const fieldName = 'agencyDueDate';
+router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const fieldName = "agencyDueDate";
     const { userId } = req.auth;
     const user = yield prisma.user.findUnique({
         where: {
@@ -33,24 +33,24 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const totals = yield prisma.$queryRawUnsafe(sql);
     res.send((0, json_1.json)(totals));
 }));
-router.get('/:id/:status', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/:id/:status", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, status } = req.params;
     console.log(`id:${id}, status:${status}`);
-    const fieldName = 'agencyDueDate';
+    const fieldName = "agencyDueDate";
     let sql = `select o.* from "order" o where o."clientId"=${id}`;
-    if (status === 'perif') {
+    if (status === "perif") {
         sql += ` and "${fieldName}"-CURRENT_DATE>=21`;
     }
-    if (status === 'onTarget') {
+    if (status === "onTarget") {
         sql += ` and "${fieldName}"-CURRENT_DATE>=14 and "${fieldName}"-CURRENT_DATE<21`;
     }
-    if (status === 'concern') {
+    if (status === "concern") {
         sql += ` and "${fieldName}"-CURRENT_DATE>=7 and "${fieldName}"-CURRENT_DATE<14`;
     }
-    if (status === 'critical') {
+    if (status === "critical") {
         sql += ` and "${fieldName}"-CURRENT_DATE>=3 and "${fieldName}"-CURRENT_DATE<7`;
     }
-    if (status === 'error') {
+    if (status === "error") {
         sql += ` and "${fieldName}"-CURRENT_DATE<3`;
     }
     const orders = yield prisma.$queryRawUnsafe(sql);

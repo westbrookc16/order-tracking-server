@@ -17,11 +17,11 @@ const express_1 = __importDefault(require("express"));
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const router = express_1.default.Router();
-router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const clients = yield prisma.client.findMany({ orderBy: { name: 'asc' } });
+router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const clients = yield prisma.client.findMany({ orderBy: { name: "asc" } });
     res.json(clients);
 }));
-router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const client = yield prisma.client.findUnique({
         where: {
@@ -30,7 +30,7 @@ router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     });
     res.json(client);
 }));
-router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, description } = req.body;
     const client = yield prisma.client.create({
         data: {
@@ -40,7 +40,7 @@ router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     });
     res.json(client);
 }));
-router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(`updating server.`);
     const { id } = req.params;
     console.log(`id:${id}`);
@@ -57,7 +57,7 @@ router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     });
     res.json(client);
 }));
-router.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const client = yield prisma.client.delete({
         where: {
